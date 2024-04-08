@@ -21,6 +21,22 @@ const Users = db.define('users', {
             len: [3, 100]
         }
     },
+    pointContact: {
+        type: DataTypes.STRING,
+        defaultValue: DataTypes.UUIDV4,
+        allowNull: false,
+        validate: {
+            notEmpty: true,
+            len: [3, 150]
+        }
+    },
+    phoneNumber:{
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        validate:{
+            notEmpty: true
+        }
+    },
     email: {
         type: DataTypes.STRING,
         defaultValue: DataTypes.UUIDV4,

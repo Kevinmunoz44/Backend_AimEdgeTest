@@ -5,7 +5,7 @@ import argon2, { hash } from 'argon2';
 export const getUser = async (req, res) => {
     try {
         const response = await User.findAll({
-            attributes: ['uuid', 'name', 'email', 'password', 'role']
+            attributes: ['uuid', 'name', 'pointContact', 'phoneNumber', 'email', 'password', 'role']
         });
         res.status(200).json(response)
     } catch (error) {
@@ -16,7 +16,7 @@ export const getUser = async (req, res) => {
 export const getUserById = async (req, res) => {
     try {
         const response = await User.findOne({
-            attributes: ['uuid', 'name', 'email', 'role'],
+            attributes: ['uuid', 'name', 'pointContact', 'phoneNumber', 'email', 'role'],
             where: {
                 uuid: req.params.id
             }
@@ -28,7 +28,7 @@ export const getUserById = async (req, res) => {
 }
 
 export const createUser = async (req, res) => {
-    const { name, email, password, confpassword, role } = req.body
+    const { name, pointContact, phoneNumber, email, password, confpassword, role } = req.body
     if (password !== confpassword) {
         return res.status(400).json({ msg: 'password must be provided' })
     }
@@ -36,6 +36,8 @@ export const createUser = async (req, res) => {
     try {
         await User.create({
             name: name,
+            pointContact: pointContact,
+            phoneNumber: phoneNumber,
             email: email,
             password: hashPassword,
             role: role
@@ -53,7 +55,7 @@ export const updateUser = async (req, res) => {
         }
     });
     if (!user) return res.status(404).json({ msg: 'User not found' });
-    const { name, email, password, confpassword, role } = req.body
+    const { name, pointContact, phoneNumber, email, password, confpassword, role } = req.body
     let hashPassword;
     if (password === '' || password === null) {
         hashPassword = user.password
@@ -66,6 +68,8 @@ export const updateUser = async (req, res) => {
     try {
         await User.update({
             name: name,
+            pointContact: pointContact,
+            phoneNumber: phoneNumber,
             email: email,
             password: hashPassword,
             role: role
