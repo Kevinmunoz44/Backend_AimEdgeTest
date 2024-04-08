@@ -5,7 +5,7 @@ import argon2, { hash } from 'argon2';
 export const getUser = async (req, res) => {
     try {
         const response = await User.findAll({
-            attributes: ['uuid', 'name', 'email', 'role']
+            attributes: ['uuid', 'name', 'email', 'password', 'role']
         });
         res.status(200).json(response)
     } catch (error) {
