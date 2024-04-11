@@ -7,7 +7,7 @@ export const getProducts = async (req, res) => {
         let response;
         if (req.role === "admin") {
             response = await Product.findAll({
-                attributes: ['uuid', 'client', 'date', 'subtotal', 'discount', 'total'],
+                attributes: ['uuid', 'client', 'date', 'quantity', 'productName', 'subtotal', 'discount', 'total'],
                 include: [{
                     model: User,
                     attributes: ['name', 'email']
@@ -15,7 +15,7 @@ export const getProducts = async (req, res) => {
             });
         } else {
             response = await Product.findAll({
-                attributes: ['uuid', 'client', 'date', 'subtotal', 'discount', 'total'],
+                attributes: ['uuid', 'client', 'date', 'quantity', 'productName', 'subtotal', 'discount', 'total'],
                 where: {
                     userId: req.userId
                 },
@@ -42,7 +42,7 @@ export const getProductsById = async (req, res) => {
         let response;
         if (req.role === "admin") {
             response = await Product.findOne({
-                attributes: ['uuid', 'client', 'date', 'subtotal', 'discount', 'total'],
+                attributes: ['uuid', 'client', 'date', 'quantity', 'productName', 'subtotal', 'discount', 'total'],
                 where: {
                     id: product.id
                 },
@@ -53,7 +53,7 @@ export const getProductsById = async (req, res) => {
             });
         } else {
             response = await Product.findOne({
-                attributes: ['uuid', 'client', 'date', 'subtotal', 'discount', 'total'],
+                attributes: ['uuid', 'client', 'date', 'quantity', 'productName', 'subtotal', 'discount', 'total'],
                 where: {
                     [Op.and]: [{ id: product.id }, { userId: req.userId }]
                 },
@@ -70,13 +70,12 @@ export const getProductsById = async (req, res) => {
 };
 
 export const createProducts = async (req, res) => {
-    const { client, date, productId, quantity, productName, subtotal, discount, total } = req.body;
+    const { client, date, quantity, productName, subtotal, discount, total } = req.body;
     try {
         const userId = req.userId;
         await Product.create({
             client: client,
             date: date,
-            productId: productId,
             quantity: quantity,
             productName: productName,
             subtotal: subtotal,
@@ -98,16 +97,16 @@ export const updateProducts = async (req, res) => {
             }
         });
         if (!product) return res.status(404).json({ msg: "Product not found" });
-        const { client, date, productId, quantity, productName, subtotal, discount, total } = req.body;
+        const { client, date, quantity, productName, subtotal, discount, total } = req.body;
         if (req.role === "admin") {
-            await Product.update({ client, date, productId, quantity, productName, subtotal, discount, total }, {
+            await Product.update({ client, date, quantity, productName, subtotal, discount, total }, {
                 where: {
                     id: product.id
                 }
             });
         } else {
             if (req.userId !== product.userId) return res.status(403).json({ msg: "Product not found with id" });
-            await Product.update({ client, date, productId, quantity, productName, subtotal, discount, total }, {
+            await Product.update({ client, date, quantity, productName, subtotal, discount, total }, {
                 where: {
                     [Op.and]: [{ id: product.id }, { userId: req.userId }]
                 }

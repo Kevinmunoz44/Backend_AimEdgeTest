@@ -28,13 +28,6 @@ const Products = db.define('product', {
             notEmpty: true
         }
     },
-    productId: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        validate: {
-            notEmpty: true
-        }
-    },
     quantity: {
         type: DataTypes.INTEGER,
         allowNull: false,

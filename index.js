@@ -24,9 +24,9 @@ const store = new sessionStore({
     db: db
 });
 
-// (async()=>{
-//     await db.sync();
-// })();
+(async()=>{
+    await db.sync();
+})();
 
 app.use(session({
     secret: process.env.SESS_SECRET,
@@ -46,7 +46,7 @@ app.use(UserRoutes);
 app.use(AuthRoutes);
 app.use(productRoutes);
 
-// store.sync();
+store.sync();
 
 app.listen(port, () => {
     console.log(`Server listening on ${port}`)
